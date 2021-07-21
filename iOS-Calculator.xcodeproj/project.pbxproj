@@ -53,9 +53,17 @@
 				B997183B26A839AB00CFD1BC /* AppDelegate.swift */,
 				B997184426A839AE00CFD1BC /* Assets.xcassets */,
 				B997184626A839AE00CFD1BC /* LaunchScreen.storyboard */,
-				B997184926A839AE00CFD1BC /* Info.plist */,
+				B997185426A850FE00CFD1BC /* Supporting Files */,
 			);
 			path = "iOS-Calculator";
+			sourceTree = "<group>";
+		};
+		B997185426A850FE00CFD1BC /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B997184926A839AE00CFD1BC /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,7 +276,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 88DBB52X8J;
-				INFOPLIST_FILE = "iOS-Calculator/Info.plist";
+				INFOPLIST_FILE = "iOS-Calculator/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -287,7 +295,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 88DBB52X8J;
-				INFOPLIST_FILE = "iOS-Calculator/Info.plist";
+				INFOPLIST_FILE = "iOS-Calculator/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
