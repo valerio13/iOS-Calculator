@@ -21,6 +21,7 @@ final class HomeViewController: UIViewController {
     @IBOutlet weak var number7: UIButton!
     @IBOutlet weak var number8: UIButton!
     @IBOutlet weak var number9: UIButton!
+    @IBOutlet weak var numberDecimal: UIButton!
     
     @IBOutlet weak var operatorAC: UIButton!
     @IBOutlet weak var operatorPlusMinus: UIButton!
@@ -69,5 +70,12 @@ final class HomeViewController: UIViewController {
     }
     
     @IBAction func operatorDivisionAction(_ sender: UIButton) {
+    }
+    
+    @IBAction func numberDecimalAction(_ sender: UIButton) {
+    }
+    
+    @IBAction func numberAction(_ sender: UIButton) {
+        print(sender.tag)
     }
 }
