@@ -12,6 +12,7 @@
 		B997183C26A839AB00CFD1BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B997183B26A839AB00CFD1BC /* AppDelegate.swift */; };
 		B997184526A839AE00CFD1BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B997184426A839AE00CFD1BC /* Assets.xcassets */; };
 		B997184826A839AE00CFD1BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B997184626A839AE00CFD1BC /* LaunchScreen.storyboard */; };
+		B9A7347826A98B93002D1636 /* UIButtonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A7347726A98B93002D1636 /* UIButtonExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		B997184426A839AE00CFD1BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B997184726A839AE00CFD1BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B997184926A839AE00CFD1BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B9A7347726A98B93002D1636 /* UIButtonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 		B997185826A8552B00CFD1BC /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				B9A7347726A98B93002D1636 /* UIButtonExtension.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -200,6 +203,7 @@
 			files = (
 				B997183C26A839AB00CFD1BC /* AppDelegate.swift in Sources */,
 				B986F4BB26A952F000D70CD5 /* HomeViewController.swift in Sources */,
+				B9A7347826A98B93002D1636 /* UIButtonExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
