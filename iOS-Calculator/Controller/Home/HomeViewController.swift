@@ -32,6 +32,64 @@ final class HomeViewController: UIViewController {
     @IBOutlet weak var operatorMultiplication: UIButton!
     @IBOutlet weak var operatorDivision: UIButton!
     
+    // MARK: - Variables
+    private var operationData = OperationData()
+    private var isADecimalValue = false
+    private var currentOperationType: OperationType = .none
+    
+    // MARK: - Constants
+    private let KDecimalSeparetor = Locale.current.decimalSeparator!
+    private let KMaxLength: Int = 9
+    private let KToltal = "total"
+    
+    private let auxFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        let locale = Locale.current
+        formatter.groupingSeparator = ""
+        formatter.decimalSeparator = locale.decimalSeparator
+        formatter.numberStyle = .decimal
+        formatter.maximumIntegerDigits = 100
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 100
+        return formatter
+    }()
+
+    private let auxTotalFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = ""
+        formatter.decimalSeparator = ""
+        formatter.numberStyle = .decimal
+        formatter.maximumIntegerDigits = 100
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 100
+        return formatter
+    }()
+
+    private let printFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        let locale = Locale.current
+        formatter.groupingSeparator = locale.groupingSeparator
+        formatter.decimalSeparator = locale.decimalSeparator
+        formatter.numberStyle = .decimal
+        formatter.maximumIntegerDigits = 9
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 8
+        return formatter
+    }()
+
+    private let printScientificFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .scientific
+        formatter.maximumIntegerDigits = 3
+        formatter.exponentSymbol = "e"
+        return formatter
+    }()
+
+    
+    private enum OperationType{
+        case none, addiction, substraction, multiplication, division, percent
+    }
+    
     // MARK: - Initialization
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -44,6 +102,8 @@ final class HomeViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        numberDecimal.setTitle(KDecimalSeparetor, for: .normal)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,67 +112,246 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Button Actions
     @IBAction func operatorACAction(_ sender: UIButton) {
-        sender.shine()
+        cleanAllData()
+        
+        sender.shineEffect()
     }
     
     @IBAction func operatorPlusMinusAction(_ sender: UIButton) {
-        sender.shine()
+        if currentOperationType != .none {
+            operationData.value2 = operationData.value2 * (-1)
+            resultLabel.text = printFormatter.string(from: NSNumber(value: operationData.value2 ))
+        } else {
+            operationData.value1 = operationData.value1 * (-1)
+            resultLabel.text = printFormatter.string(from: NSNumber(value: operationData.value1 ))
+        }
+
+        sender.shineEffect()
     }
     
     @IBAction func operatorPercentAction(_ sender: UIButton) {
-        sender.shine()
+        if currentOperationType != .percent{
+            calculateFinalResult()
+        }
+        
+        currentOperationType = .percent
+        calculateFinalResult()
+        
+        sender.shineEffect()
     }
     
     @IBAction func operatorResultAction(_ sender: UIButton) {
-        sender.shine()
+        calculateFinalResult()
+        
+        operationData.value1 = 0
+        operationData.value2 = 0
+        
+        sender.shineEffect()
     }
+
     
     @IBAction func operatorAdditionAction(_ sender: UIButton) {
-        sender.shine()
+        executeThe(operation: .addiction)        
+        sender.invertColors()
+        
+        sender.shineEffect()
     }
     
     @IBAction func operatorSubstractionAction(_ sender: UIButton) {
-        sender.shine()
+        executeThe(operation: .substraction)
+        sender.invertColors()
+        
+        sender.shineEffect()
     }
     
     @IBAction func operatorMultiplicationAction(_ sender: UIButton) {
-        sender.shine()
+        executeThe(operation: .multiplication)
+        sender.invertColors()
+        
+        sender.shineEffect()
     }
     
     @IBAction func operatorDivisionAction(_ sender: UIButton) {
-        sender.shine()
+        executeThe(operation: .division)
+        sender.invertColors()
+        
+        sender.shineEffect()
     }
     
     @IBAction func numberDecimalAction(_ sender: UIButton) {
-        sender.shine()
+        /*
+        let currentTempValue = auxTotalFormatter.string(from: NSNumber(value: tempValue))
+        if !isOperationSelected && currentTempValue!.count >= KMaxLength{
+            return
+        }
+        
+        resultLabel.text = resultLabel.text! + KDecimalSeparetor
+        isADecimalValue = true
+        
+        higlightSelectedButton()
+        
+        sender.shineEffect()
+ */
     }
     
     @IBAction func numberAction(_ sender: UIButton) {
-        sender.shine()
-        print(sender.tag)
+        printVariables()
+        
+        operatorAC.setTitle("C", for: .normal)
+        
+        var tempValue = currentOperationType != .none ? operationData.value2 : operationData.value1
+        var currentTempValue = auxTotalFormatter.string(from: NSNumber(value: tempValue))
+        
+        if currentOperationType == .none && currentTempValue!.count >= KMaxLength{
+            return
+        }
+        
+        currentTempValue = auxFormatter.string(from: NSNumber(value: tempValue))
+
+        if isADecimalValue{
+            currentTempValue = "\(currentTempValue!)\(KDecimalSeparetor)"
+            isADecimalValue = false
+        }
+        
+        let number = sender.tag
+        tempValue = Double(currentTempValue! + String(number))!
+        
+        if currentOperationType == .none {
+            operationData.value1 = Double(tempValue)
+            operationData.value2 = 0
+            operationData.total = 0
+        } else{
+            operationData.value1 =  operationData.total != 0 ?   operationData.total :   operationData.value1
+            operationData.value2 =  Double(tempValue)
+        }
+        
+        resultLabel.text = printFormatter.string(from: NSNumber(value: tempValue))
+
+        sender.shineEffect()
+        printVariables()
+        
     }
     
     // MARK: - Private Methods
-    func roundAllButtons() {
-        number0.round()
-         number1.round()
-         number2.round()
-         number3.round()
-         number4.round()
-         number5.round()
-         number6.round()
-         number7.round()
-         number8.round()
-         number9.round()
-         numberDecimal.round()
+    private func roundAllButtons() {
+        number0.roundCornerBorders()
+         number1.roundCornerBorders()
+         number2.roundCornerBorders()
+         number3.roundCornerBorders()
+         number4.roundCornerBorders()
+         number5.roundCornerBorders()
+         number6.roundCornerBorders()
+         number7.roundCornerBorders()
+         number8.roundCornerBorders()
+         number9.roundCornerBorders()
+         numberDecimal.roundCornerBorders()
         
-         operatorAC.round()
-         operatorPlusMinus.round()
-         operatorPercent.round()
-         operatorResult.round()
-         operatorAddition.round()
-         operatorSubstraction.round()
-         operatorMultiplication.round()
-         operatorDivision.round()
+         operatorAC.roundCornerBorders()
+         operatorPlusMinus.roundCornerBorders()
+         operatorPercent.roundCornerBorders()
+         operatorResult.roundCornerBorders()
+         operatorAddition.roundCornerBorders()
+         operatorSubstraction.roundCornerBorders()
+         operatorMultiplication.roundCornerBorders()
+         operatorDivision.roundCornerBorders()
+    }
+    
+    private func cleanAllData(){
+        currentOperationType = .none
+        operatorAC.setTitle("AC", for: .normal)
+        operationData.total = 0
+        operationData.value1 = 0
+        operationData.value2 = 0
+        resultLabel.text = ""
+        
+        printVariables()
+    }
+        
+    private func executeThe(operation: OperationType) {
+        if currentOperationType != .none {
+            calculateFinalResult()
+        }
+        currentOperationType = operation
+    }
+    
+    private func calculateFinalResult(){
+        printVariables()
+        
+        switch currentOperationType {
+        case .none:
+            break
+        case .addiction:
+            operationData.total = operationData.value1 + operationData.value2
+            break
+        case .substraction:
+            operationData.total = operationData.value1 - operationData.value2
+            break
+        case .multiplication:
+            operationData.total = operationData.value1 * operationData.value2
+            break
+        case .division:
+            operationData.total = operationData.value1 / operationData.value2
+            break
+        case .percent:
+            operationData.total = operationData.value1/100
+            break
+        }
+        
+        if let currentTotal = auxTotalFormatter.string(from: NSNumber(value: operationData.total)), currentTotal.count > KMaxLength{
+            resultLabel.text = printScientificFormatter.string(from: NSNumber(value: operationData.total))
+        } else {
+            resultLabel.text = printFormatter.string(from: NSNumber(value: operationData.total))
+        }
+        
+        currentOperationType = .none
+                
+        higlightSelectedButton()
+        
+        UserDefaults.standard.set(operationData.total, forKey: KToltal)
+        
+        printVariables()
+    }
+
+    
+    private func higlightSelectedButton(){
+        if currentOperationType == .none {
+            resetOperationButtons()
+        }else{
+            switch currentOperationType {
+                case .none, .percent:
+                    resetOperationButtons()
+                    break
+                case .addiction:
+                    resetOperationButtons()
+                    operatorAddition.invertColors()
+                    break
+                case .substraction:
+                    resetOperationButtons()
+                    operatorSubstraction.invertColors()
+                    break
+                case .multiplication:
+                    resetOperationButtons()
+                    operatorMultiplication.invertColors()
+                    break
+                case .division:
+                    resetOperationButtons()
+                    operatorDivision.invertColors()
+                    break
+            }
+        }
+    }
+    
+    private func resetOperationButtons(){
+        operatorAddition.resetColors()
+        operatorSubstraction.resetColors()
+        operatorDivision.resetColors()
+        operatorMultiplication.resetColors()
+    }
+    
+    private func printVariables(){
+        print("VALUE1: \(operationData.value1)")
+        print("VALUE2: \(operationData.value2)")
+        print("TOTAL: \(operationData.total)")
+        print("\r\n")
     }
 }
