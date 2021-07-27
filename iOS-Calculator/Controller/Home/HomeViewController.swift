@@ -103,6 +103,9 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        operationData.total = UserDefaults.standard.double(forKey: KToltal)
+        resultLabel.text = printFormatter.string(from: NSNumber(value: operationData.total))
+        
         numberDecimal.setTitle(KDecimalSeparetor, for: .normal)
     }
     
@@ -179,9 +182,10 @@ final class HomeViewController: UIViewController {
     }
     
     @IBAction func numberDecimalAction(_ sender: UIButton) {
-        /*
+        let tempValue = currentOperationType != .none ? operationData.value2 : operationData.value1
         let currentTempValue = auxTotalFormatter.string(from: NSNumber(value: tempValue))
-        if !isOperationSelected && currentTempValue!.count >= KMaxLength{
+        
+        if currentOperationType == .none && currentTempValue!.count >= KMaxLength{
             return
         }
         
@@ -191,7 +195,6 @@ final class HomeViewController: UIViewController {
         higlightSelectedButton()
         
         sender.shineEffect()
- */
     }
     
     @IBAction func numberAction(_ sender: UIButton) {
@@ -202,7 +205,7 @@ final class HomeViewController: UIViewController {
         var tempValue = currentOperationType != .none ? operationData.value2 : operationData.value1
         var currentTempValue = auxTotalFormatter.string(from: NSNumber(value: tempValue))
         
-        if currentOperationType == .none && currentTempValue!.count >= KMaxLength{
+        if currentTempValue!.count >= KMaxLength{
             return
         }
         
